@@ -17,3 +17,6 @@ node_modules
 
 # The following task was done to not synch files from
 .README.md
+
+# Ignore lock yaml file
+pnpm-lock.yaml
