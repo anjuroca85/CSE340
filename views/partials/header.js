@@ -1,0 +1,12 @@
+<header id="top-header">
+  <span class="siteName">
+    <a href="/" title="return to home page">
+      CSE Motors
+    </a>
+  </span>
+  <div id="tools">
+    <a title="Click to log in" href="/account/login">
+      My Account
+    </a>
+  </div>
+</header>;
