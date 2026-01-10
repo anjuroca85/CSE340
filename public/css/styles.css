@@ -1,6 +1,211 @@
 /******* Change Box Model ***************/
 *,
-*:before,
-*:after {
+*::before,/* Minor correction with double colons*/
+*::after {
   box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  background-image: url("/images/site/checkerboard.jpg");
+  background-repeat: repeat;
+  background-size: auto;
+  background-position: top left;
+  color: #222;  
+}
+
+/* ---------- Page Wrapper ---------- */
+#wrapper {
+  max-width: 1000px;
+  margin: 1rem auto;
+  height:auto;
+  background-color: #ffffff;
+  border-radius: 6px;
+  border: 4px solid #006097;
+  overflow: hidden;
+}
+
+/* ---------- Header ---------- */
+#top-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  background-color: #ffffff;
+}
+
+.siteName a {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #111827;
+  text-decoration: none;
+}
+
+.siteName a:hover,
+.siteName a:focus {
+  text-decoration: underline;
+}
+
+#tools a {
+  font-size: 0.95rem;
+  /* color: #0284c7; */
+  color:#006097;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+#tools a:hover,
+#tools a:focus {
+  text-decoration: underline;
+}
+
+/* ---------- Navigation ---------- */
+.main-nav ul {
+  display: flex;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  background-color: #374151;
+}
+
+.main-nav li {
+  flex: 1;
+}
+
+.main-nav a {
+  display: block;
+  padding: 0.75rem;
+  text-align: center;
+  color: #ffffff;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.main-nav a:hover,
+.main-nav a:focus {
+  background-color: #1f2937;
+}
+
+/* ---------- Hero Section ---------- */
+.hero {
+  padding: 1rem;
+}
+
+.hero-text h1 {
+  margin-top: 0;
+}
+
+.vehicle-highlight {
+  background-color: #e0f2fe;
+  padding: 1rem;
+  max-width: 300px;
+}
+
+.vehicle-highlight h2 {
+  margin-top: 0;
+  color: #0284c7;
+}
+
+.vehicle-highlight ul {
+  padding-left: 1.2rem;
+}
+
+.cta-btn {
+  display: inline-block;
+  margin-top: 0.75rem;
+  padding: 0.5rem 1rem;
+  background-color: #0284c7;
+  color: #ffffff;
+}
+
+.cta-btn:hover,
+.cta-btn:focus {
+  background-color: #0369a1;
+}
+
+.hero-image img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* ---------- Main Content ---------- */
+.content-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  padding: 1rem;
+}
+
+.upgrades h3,
+.reviews h3 {
+  margin-top: 0;
+}
+
+/* --------- Upgrades Grid --------- */
+.upgrade-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+
+.upgrade-item {
+  background-color: #006097;
+  padding: 0.75rem;
+  text-align: center;
+}
+
+.upgrade-item img {
+  max-width: 100%;
+  height: auto;
+}
+
+.upgrade-item a {
+  display: block;
+  margin-top: 0.5rem;
+  color: #ffffff;
+  font-weight: 600;
+  text-decoration: underline;
+}
+
+/* -------- Reviews --------- */
+.reviews ul {
+  padding-left: 1.2rem;
+  margin: auto;
+}
+
+/* --------- Footer ---------- */
+.site-footer {
+  text-align: center;
+  padding: 1rem;
+  background-color: #1f2937;
+  color: #ffffff;
+  font-size: 0.9rem;
+}
+
+/* ---------- Desktop Layout ---------- */
+@media screen and (min-width: 768px) {
+  .hero {
+    display: flex;
+    gap: 2rem;
+    align-items: center;
+  }
+
+
+  .content-grid {
+    flex-direction: row;
+    align-items: stretch;
+  }
+
+  .upgrades,
+  .reviews {
+    width: 50%;
+  }
+
+  .reviews li{
+    font-size: 1.3rem;
+    padding: 0.8rem;
+  }
+
 }
