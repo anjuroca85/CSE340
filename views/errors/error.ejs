@@ -1,0 +1,17 @@
+<%# Error page heading: uses the title passed from the error handler %>
+    <% if (title) { %>
+        <h1>
+            <%= title %>
+        </h1>
+        <% } else { res.redirect('/') } %>
+
+<%# Error message: %>
+    <div class="error">
+         <%- message %>
+    </div>
+
+<%# humor or friendly text so users are not so disappointed %>
+ <p class="notice">
+    Well… this is not what you wanred to see. Something went wrong, but at least you’re not lost forever.
+    Try using the navigation menu above to get back on track.
+</p>

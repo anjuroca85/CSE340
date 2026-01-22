@@ -244,7 +244,7 @@ main h1 {
 }
 
 /* Responsive columns for inventory grid */
-@media (min-width: 600px) {
+@media (min-width: 500px) {
   #inv-display {
     grid-template-columns: repeat(2, 1fr);
   }
@@ -256,6 +256,29 @@ main h1 {
   }
 }
 
+/* notice, success, and Error handling */
+.notice,
+.success,
+.error {
+  padding: 0.75rem 1rem;
+  border-radius: 6px;
+  margin: 0 0 1rem 0;
+}
+
+.notice {
+  background: #e0f2fe;
+  border: 1px solid #7dd3fc;
+}
+
+.success {
+  background: #dcfce7;
+  border: 1px solid #86efac;
+}
+
+.error {
+  background: #fee2e2;
+  border: 1px solid #fca5a5;
+}
 
 /* Footer  */
 footer,
