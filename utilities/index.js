@@ -1,3 +1,5 @@
+//This is my utilities/index.js
+
 const invModel = require("../models/inventory-model");
 const Util = {};
 
@@ -57,6 +59,37 @@ Util.buildClassificationGrid = async function(data){
   }
   return grid
 }
+
+/* **************************************
+ * Build the inventory detail view HTML
+ * ************************************ */
+Util.buildDetailView = async function (vehicle) {
+  let detail = "";
+
+  detail += `<section class="vehicle-detail"> <h2 class="visually-hidden">
+            Vehicle details for ${vehicle.inv_year} ${vehicle.inv_make} ${vehicle.inv_model}
+            </h2>`;
+
+  detail += `
+    <div class="vehicle-detail__image">
+      <img src="${vehicle.inv_image}" alt="Image of ${vehicle.inv_make} ${vehicle.inv_model} on CSE Motors">
+    </div>
+  `;
+
+  detail += `
+    <div class="vehicle-detail__info">
+      <p class="vehicle-detail__title">${vehicle.inv_year} ${vehicle.inv_make} ${vehicle.inv_model}</p>
+      <p class="vehicle-detail__price">$${new Intl.NumberFormat("en-US").format(vehicle.inv_price)}</p>
+      <p class="vehicle-detail__miles"><strong>Mileage:</strong> ${new Intl.NumberFormat("en-US").format(vehicle.inv_miles)} miles</p>
+      <p class="vehicle-detail__color"><strong>Color:</strong> ${vehicle.inv_color || "N/A"}</p>
+      <p class="vehicle-detail__description"><strong>Description:</strong> ${vehicle.inv_description}</p>
+    </div>
+  `;
+
+  detail += `</section>`;
+
+  return detail;
+};
 
 /* ****************************************
  * Middleware For Handling Errors

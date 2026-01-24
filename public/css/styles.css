@@ -256,6 +256,77 @@ main h1 {
   }
 }
 
+/* ---------- Vehicle Detail View ---------- */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.vehicle-detail {
+  display: flex;
+  flex-direction: column;
+  /* mobile: stack */
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.vehicle-detail__image img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 8px;
+}
+
+.vehicle-detail__info {
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  padding: 1rem;
+  background-color: #ffffff;
+}
+
+.vehicle-detail__title {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.vehicle-detail__price {
+  margin: 0 0 1rem 0;
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: #006097;
+}
+
+.vehicle-detail__miles,
+.vehicle-detail__color,
+.vehicle-detail__description {
+  margin: 0 0 0.75rem 0;
+  line-height: 1.4;
+}
+
+/* Large screens: side-by-side layout */
+@media (min-width: 768px) {
+  .vehicle-detail {
+    flex-direction: row;
+    align-items: flex-start;
+  }
+
+  .vehicle-detail__image {
+    flex: 1;
+  }
+
+  .vehicle-detail__info {
+    flex: 1;
+  }
+}
+
 /* notice, success, and Error handling */
 .notice,
 .success,
@@ -292,6 +363,17 @@ footer,
 
 footer .copyright {
   margin: 0;
+}
+
+/* The following handles the footer error  */
+footer a{
+  color: #fff;
+  text-decoration: underline;
+}
+
+footer a:hover,
+footer a:focus {
+  text-decoration: none;
 }
 
 /* ---------- Desktop Layout ---------- */
