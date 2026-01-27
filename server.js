@@ -14,8 +14,30 @@ const baseController = require("./controllers/baseController");
 // Inventory routes
 const inventoryRoute = require("./routes/inventoryRoute");//This seems to have been missed by the course training
 const utilities = require("./utilities");
+// The following were installed in week 4. pnpm add express-session connect-pg-simple express-messages connect-flash
+const session = require("express-session");
+const pool = require('./database/');
 
+/* ***********************
+ * Middleware
+ * ************************/
+app.use(session({
+  store: new (require('connect-pg-simple')(session))({
+    createTableIfMissing: true,
+    pool,
+  }),
+  secret: process.env.SESSION_SECRET,
+  resave: true,
+  saveUninitialized: true,
+  name: 'sessionId',
+}))
 
+// Express Messages Middleware
+app.use(require('connect-flash')())
+app.use(function(req, res, next){
+  res.locals.messages = require('express-messages')(req, res)
+  next()
+})
 
 /* ***********************
  * View Engine and Templates
