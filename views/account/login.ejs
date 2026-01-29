@@ -1,0 +1,25 @@
+<%# Page heading using the title passed from the controller %>
+<% if (title) { %>
+    <h1><%= title %></h1>
+<% } %>
+
+<%# Display flash messages if one is sent %>
+<%- messages() %>
+
+<form class="account-form" action="/account/login" method="post">
+    <fieldset>
+        <legend>Account Login</legend>
+        <label for="account_email">Email Address</label>
+        <input type="email" id="account_email" name="account_email" required autocomplete="email"
+            placeholder="you@example.com">
+        <label for="account_password">Password</label>
+        <span id="loginPasswordHelp">Passwords must be at least 12 characters and contain at least 1 number, 1 capital letter and 1 special character</span>
+        <input type="password" id="account_password" name="account_password" required autocomplete="current-password" pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{12,}$" 
+        title="Password must be at least 12 characters and include at least 1 number, 1 uppercase letter, and 1 special character." minlength="12" aria-describedby="loginPasswordHelp">
+        <button type="submit">Login</button>
+    </fieldset>
+</form>
+<p class="account-note">
+    Don't have an account?
+    <a href="/account/register">Create an account</a>
+</p>

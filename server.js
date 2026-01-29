@@ -17,6 +17,10 @@ const utilities = require("./utilities");
 // The following were installed in week 4. pnpm add express-session connect-pg-simple express-messages connect-flash
 const session = require("express-session");
 const pool = require('./database/');
+const bodyParser = require("body-parser");
+
+//mounting point route for account
+const accountRoute = require("./routes/accountRoute");
 
 /* ***********************
  * Middleware
@@ -39,12 +43,19 @@ app.use(function(req, res, next){
   next()
 })
 
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
+
 /* ***********************
  * View Engine and Templates
  *************************/
 app.set("view engine", "ejs");
 app.use(expressLayouts);
 app.set("layout", "./layouts/layout"); // not at views root
+
+// app.use(express.urlencoded({ extended: true }));
+// app.use(express.json());
+
 
 /* ***********************
  * Routes
@@ -54,6 +65,9 @@ app.use(static);
 app.get("/", utilities.handleErrors(baseController.buildHome));
 // Inventory routes
 app.use("/inv", inventoryRoute);
+
+// used in the account route
+app.use("/account", accountRoute)
 
 //trigger error controller route
 app.get("/error", utilities.handleErrors(baseController.triggerError));
