@@ -6,7 +6,7 @@
 
 <%- messages() %>
 <% if (errors) { %>
-    <ul class="notice">
+    <ul class="error-list">
         <% errors.array().forEach(error=> { %>
             <li>
                 <%= error.msg %>

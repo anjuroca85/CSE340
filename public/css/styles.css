@@ -1,6 +1,7 @@
 /******* Change Box Model ***************/
+/* Minor correction with double colons */
 *,
-*::before,/* Minor correction with double colons*/
+*::before,
 *::after {
   box-sizing: border-box;
 }
@@ -76,42 +77,139 @@ body {
   color: #006097;
 }
 
-/* ---------- Account Login Form ---------- */
-.account-form {
-  max-width: 420px;
+/* ---------- Forms (Account + Inventory) ---------- */
+
+.account-form,
+.inv-form {
+  max-width: 900px;
 }
 
-.account-form fieldset {
+.account-form fieldset,
+.inv-form fieldset {
   border: 1px solid #d1d5db;
-  border-radius: 6px;
+  border-radius: 10px;
   padding: 1rem;
+  background: #fff;
 }
 
-.account-form label {
+.account-form legend,
+.inv-form legend {
+  padding: 0 .5rem;
+  font-weight: 700;
+}
+
+.account-form label,
+.inv-form label {
   display: block;
-  margin-top: 0.75rem;
+  margin-top: .75rem;
   font-weight: 600;
 }
 
-.account-form input {
+.account-form input,
+.account-form select,
+.account-form textarea,
+.inv-form input,
+.inv-form select,
+.inv-form textarea {
   width: 100%;
-  padding: 0.5rem;
-  margin-top: 0.25rem;
+  margin-top: .25rem;
+  padding: .55rem .65rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  background: #fff;
+  font: inherit;
 }
 
-.account-form button {
+.account-form textarea,
+.inv-form textarea {
+  min-height: 110px;
+  resize: vertical;
+}
+
+.account-form span,
+.inv-form span {
+  display: block;
+  margin-top: .35rem;
+  font-size: .9rem;
+  color: #475569;
+}
+
+/* Buttons */
+.account-form button,
+.inv-form button {
   margin-top: 1rem;
-  padding: 0.5rem 1rem;
-  background-color: #006097;
+  padding: .6rem 1rem;
+  border: 0;
+  border-radius: 10px;
+  background: #006097;
   color: #fff;
-  border: none;
-  border-radius: 4px;
   font-weight: 700;
   cursor: pointer;
 }
 
-.account-note {
-  margin-top: 1rem;
+.account-form button:hover,
+.inv-form button:hover {
+  filter: brightness(1.05);
+}
+
+/* ---------- Validation colors (only after submit attempt) ---------- */
+
+.was-validated input:required:valid,
+.was-validated select:required:valid,
+.was-validated textarea:required:valid {
+  border-color: #22c55e;
+  background: #ecfdf5;
+  /* light green */
+}
+
+.was-validated input:required:invalid,
+.was-validated select:required:invalid,
+.was-validated textarea:required:invalid {
+  border-color: #ef4444;
+  background: #fef2f2;
+  /* light red */
+}
+
+.was-validated input:focus,
+.was-validated select:focus,
+.was-validated textarea:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.25);
+}
+
+
+/* ---------- Inventory form layout (matches your screenshots) ---------- */
+.inv-form fieldset {
+  padding: 1.25rem;
+}
+
+.inv-form .form-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px 16px;
+}
+
+.inv-form .form-actions {
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: flex-start;
+  /* or flex-end */
+}
+
+@media (min-width: 800px) {
+  .inv-form .form-grid {
+    grid-template-columns: repeat(4, 1fr);
+    align-items: end;
+  }
+
+  /* make some fields span wider */
+  .inv-form .span-2 {
+    grid-column: span 2;
+  }
+
+  .inv-form .span-4 {
+    grid-column: span 4;
+  }
 }
 
 /* ---------- Navigation ----------
@@ -402,6 +500,13 @@ main h1 {
 .error {
   background: #fee2e2;
   border: 1px solid #fca5a5;
+}
+
+.error-list {
+  background: #fee2e2;
+  border: 1px solid #fca5a5;
+  border-radius: 8px;
+  padding: 0.75rem 1.25rem;
 }
 
 /* Footer  */

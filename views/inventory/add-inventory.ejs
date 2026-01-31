@@ -13,7 +13,7 @@
 <%- messages() %>
 
 <% if (errors) { %>
-    <ul class="notice">
+    <ul class="error-list">
         <% errors.array().forEach(error=> { %>
             <li>
                 <%= error.msg %>
@@ -71,7 +71,7 @@
                 <input id="inv_color" name="inv_color" required value="<%= locals.inv_color || '' %>">
             </div>
 
-            <div class="span-4">
+            <div class="form-actions">
                 <button type="submit">Add Inventory Item</button>
             </div>
         </div>
