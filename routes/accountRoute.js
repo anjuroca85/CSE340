@@ -13,10 +13,14 @@ router.get(
   utilities.handleErrors(accountController.buildLogin)
 );
 
-//processing the loging resquest (Temporarily)
+//processing the login resquest (Temporarily)
 router.post(
-    "/login",
-    utilities.handleErrors(accountController.accountLogin)
+  "/login",
+  regValidate.loginRules(),
+  regValidate.checkLoginData,
+  utilities.handleErrors(async (req, res) => {
+    res.status(200).send("login process");
+  }),
 );
 
 //route to build registration view

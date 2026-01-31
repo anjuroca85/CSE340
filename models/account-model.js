@@ -23,7 +23,8 @@ async function registerAccount(
     ]);
     return result.rows[0];
   } catch (error) {
-    return error.message;
+    console.error(error)
+    return null;
   }
 }
 

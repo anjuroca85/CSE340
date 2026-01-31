@@ -1,6 +1,7 @@
 const utilities = require("../utilities/");
 const accountController = {};
 const accountModel = require("../models/account-model");
+const bcrypt = require("bcryptjs");
 
 /* ***************************
  *  Build login view
@@ -48,13 +49,29 @@ accountController.registerAccount = async function (req, res, next) {
     account_password,
   } = req.body;
 
-  // Send data to the model
+  // Send data to the model. **This one was altered in week 4 to replace it with an encrypt password**
+  let hashedPassword
+  try {
+    hashedPassword = await bcrypt.hash(account_password, 10)
+  }catch (error) {
+    req.flash("notice", "Sorry, there was an error processing the registration.")
+    const nav = await utilities.getNav()
+    return res.status(500).render("account/register", {
+      title: "Registration",
+      nav,
+      errors: null,
+      account_firstname,
+      account_lastname,
+      account_email,
+    })
+  }
+
   const regResult = await accountModel.registerAccount(
     account_firstname,
     account_lastname,
     account_email,
-    account_password,
-  );
+    hashedPassword
+  )
 
   // If registration is correct or not
   if (regResult) {

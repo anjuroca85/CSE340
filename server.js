@@ -93,6 +93,27 @@ app.use(async (err, req, res, next) => {
   })
 })
 
+
+//The following is for troubleshooting.
+// app.use(async (err, req, res, next) => {
+//   let nav = await utilities.getNav();
+//   console.error(`Error at: "${req.originalUrl}": ${err.message}`);
+
+//   const message =
+//     process.env.NODE_ENV === "development"
+//       ? err.message
+//       : err.status == 404
+//         ? err.message
+//         : "Oh no! There was a crash. Maybe try a different route?";
+
+//   res.status(err.status || 500).render("errors/error", {
+//     title: err.status || "Server Error",
+//     message,
+//     nav,
+//   });
+// });
+
+
 /* ***********************
  * Local Server Information
  * Values from .env (environment) file
