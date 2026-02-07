@@ -7,20 +7,31 @@ const utilities = require("../utilities");
 const accountController = require("../controllers/accountController");
 const regValidate = require("../utilities/account-validation");
 
+// Route to build check log in in default route
+router.get(
+  "/",
+  utilities.checkLogin,
+  utilities.handleErrors(accountController.buildAccountManagement)
+);
+
 // Route to build login view
 router.get(
   "/login",
   utilities.handleErrors(accountController.buildLogin)
 );
 
-//processing the login resquest (Temporarily)
+//processing the login resquest
 router.post(
   "/login",
   regValidate.loginRules(),
   regValidate.checkLoginData,
-  utilities.handleErrors(async (req, res) => {
-    res.status(200).send("login process");
-  }),
+  utilities.handleErrors(accountController.accountLogin)
+)
+
+//route to build log out view
+router.get(
+  "/logout",
+  utilities.handleErrors(accountController.accountLogout)
 );
 
 //route to build registration view

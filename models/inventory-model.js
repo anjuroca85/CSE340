@@ -90,16 +90,17 @@ async function getInventoryByClassificationId(classification_id) {
  * ************************** */
 async function getInventoryByInvId(inv_id) {
   try {
-    const data = await pool.query(
-      `SELECT * FROM public.inventory
-      WHERE inv_id = $1`,
-      [inv_id]
-    );
-    return data.rows;
+    const sql = `
+      SELECT *
+      FROM public.inventory
+      WHERE inv_id = $1
+    `
+    const result = await pool.query(sql, [inv_id])
+    return result.rows[0] // This one aims to deal with only one object
   } catch (error) {
-    console.error("getInventoryByInvId " + error);
+    console.error("getInventoryByInvId error:", error)
+    throw error
   }
-  
 }
 
 module.exports = { getClassifications, getInventoryByClassificationId, getInventoryByInvId, addClassification, addInventoryItem };

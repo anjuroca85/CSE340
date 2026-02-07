@@ -15,10 +15,12 @@ invCont.addClassification = async function (req, res, next) {
     req.flash("notice", `Success! "${classification_name}" was added.`);
 
     const newNav = await utilities.getNav()
+    const classificationSelect = await utilities.buildClassificationList()
 
     return res.status(201).render("inventory/management", {
       title: "Inventory Management",
       nav: newNav,
+      classificationSelect,
     })
   }
 
@@ -36,9 +38,12 @@ invCont.addClassification = async function (req, res, next) {
  * ************************** */
 invCont.buildManagement = async function (req, res, next) {
   const nav = await utilities.getNav();
+  const classificationSelect = await utilities.buildClassificationList();
+
   res.render("inventory/management", {
     title: "Inventory Management",
     nav,
+    classificationSelect,
     errors: null,
   });
 };
@@ -69,11 +74,13 @@ invCont.addInventory = async function (req, res, next) {
   req.flash("notice", "Inventory item added successfully.")
 
   const newNav = await utilities.getNav()
+  const classificationSelect = await utilities.buildClassificationList();
 
   res.render("inventory/management", {
     title: "Inventory Management",
     nav: newNav,
-  })
+    classificationSelect,
+  });
 
   } else {
     req.flash("notice", "Sorry, the inventory item could not be added.");
@@ -154,5 +161,64 @@ invCont.buildDetailView = async function (req, res, next){
     vehicleDetail,
    });
   };
+
+/* ***************************
+ *  Return Inventory by Classification As JSON
+ * ************************** */
+invCont.getInventoryJSON = async (req, res, next) => {
+  const classification_id = parseInt(req.params.classification_id, 10);
+
+  //The following is a basic guard in case the param is missing or it is invalid
+  if (Number.isNaN(classification_id)) {
+    return next({ status: 400, message: "Invalid classification id." });
+  }
+
+  const invData =
+    await invModel.getInventoryByClassificationId(classification_id);
+
+  // Your model returns an array (rows). Make sure it has data.
+  if (invData && invData.length > 0) {
+    return res.json(invData);
+  }
+
+  return next({
+    status: 404,
+    message: "No inventory found for that classification.",
+  });
+};
+
+/* ***************************
+ *  Build edit inventory view
+ * ************************** */
+invCont.buildEditInventory = async function (req, res, next) {
+  const nav = await utilities.getNav()
+  const inv_id = parseInt(req.params.inv_id, 10)
+
+  if (Number.isNaN(inv_id)) {
+    return next({ status: 400, message: "Invalid inventory id." })
+  }
+
+  // Model now returns a single object (rows[0])
+  const itemData = await invModel.getInventoryByInvId(inv_id)
+
+  if (!itemData) {
+    return next({ status: 404, message: "Sorry, we could not find that vehicle." })
+  }
+
+  // Pre-select the item’s classification in the dropdown
+  const classificationList = await utilities.buildClassificationList(
+    itemData.classification_id
+  )
+
+  const itemName = `${itemData.inv_make} ${itemData.inv_model}`
+
+  res.render("inventory/edit-inventory", {
+    title: `Edit ${itemName}`,
+    nav,
+    classificationList,
+    errors: null,
+    ...itemData, // makes fields available for stickiness in the view
+  })
+}
 
 module.exports = invCont;

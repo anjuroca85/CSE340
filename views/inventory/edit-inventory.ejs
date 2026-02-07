@@ -1,0 +1,45 @@
+<% if (title) { %>
+    <h1>
+        <%= title %>
+    </h1>
+<% } %>
+
+<%- messages() %>
+<% if (errors) { %>
+    <ul class="error-list">
+        <% errors.array().forEach(error=> { %>
+            <li>
+                <%= error.msg %>
+            </li>
+        <% }) %>
+    </ul>
+<% } %>
+<form class="inv-form" action="/inv/update" method="post">
+    <fieldset>
+        <legend>Update Vehicle</legend>
+        <label for="classificationList">Classification</label>
+        <%- classificationList %>
+            <label for="inv_make">Make</label>
+            <input id="inv_make" name="inv_make" required value="<%= locals.inv_make || '' %>">
+            <label for="inv_model">Model</label>
+            <input id="inv_model" name="inv_model" required value="<%= locals.inv_model || '' %>">
+            <label for="inv_year">Year</label>
+            <input id="inv_year" name="inv_year" type="number" required
+                value="<%= locals.inv_year || '' %>">
+            <label for="inv_description">Description</label>
+            <textarea id="inv_description" name="inv_description"
+                required><%= locals.inv_description || '' %></textarea>
+            <label for="inv_price">Price</label>
+            <input id="inv_price" name="inv_price" type="number" step="0.01" required
+                value="<%= locals.inv_price || '' %>">
+            <label for="inv_miles">Miles</label>
+            <input id="inv_miles" name="inv_miles" type="number" required
+                value="<%= locals.inv_miles || '' %>">
+            <label for="inv_color">Color</label>
+            <input id="inv_color" name="inv_color" required value="<%= locals.inv_color || '' %>">            
+            <input type="hidden" name="inv_image" value="<%= locals.inv_image || '' %>">
+            <input type="hidden" name="inv_thumbnail" value="<%= locals.inv_thumbnail || '' %>">            
+            <input type="hidden" name="inv_id" value="<%= locals.inv_id || '' %>">
+            <button type="submit">Update Inventory Item</button>
+    </fieldset>
+</form>

@@ -7,35 +7,45 @@ const invController = require("../controllers/invController");
 const utilities = require("../utilities");
 const invValidate = require("../utilities/inventory-validation");
 
-// Management view
+// Management view (Employee/Admin only)
 router.get(
   "/",
-  utilities.handleErrors(invController.buildManagement)
+  utilities.checkLogin,
+  utilities.checkAccountType,
+  utilities.handleErrors(invController.buildManagement),
+);
+
+// Add Classification view (Employee/Admin only)
+router.get(
+  "/add-classification",
+  utilities.checkLogin,
+  utilities.checkAccountType,
+  utilities.handleErrors(invController.buildAddClassification),
 );
 
 // Process add classification
 router.post(
   "/add-classification",
+  utilities.checkLogin,
+  utilities.checkAccountType,
   invValidate.classificationRules(),
   invValidate.checkClassificationData,
-  utilities.handleErrors(invController.addClassification)
-)
-
-// Add Classification view
-router.get(
-  "/add-classification",
-  utilities.handleErrors(invController.buildAddClassification)
+  utilities.handleErrors(invController.addClassification),
 );
 
 // deliver add-inventory view
 router.get(
   "/add-inventory",
-  utilities.handleErrors(invController.buildAddInventory)
-)
+  utilities.checkLogin,
+  utilities.checkAccountType,
+  utilities.handleErrors(invController.buildAddInventory),
+);
 
 //process adding inventory item
 router.post(
   "/add-inventory",
+  utilities.checkLogin,
+  utilities.checkAccountType,
   invValidate.inventoryRules(),
   invValidate.checkInventoryData,
   utilities.handleErrors(invController.addInventory),
@@ -51,6 +61,27 @@ router.get(
 router.get(
   "/detail/:inv_id",
   utilities.handleErrors(invController.buildDetailView)
+);
+
+// Return inventory by classification as JSON (AJAX)
+router.get(
+  "/getInventory/:classification_id",
+  utilities.handleErrors(invController.getInventoryJSON)
+);
+
+// Edit inventory item view (Employee/Admin only)
+router.get(
+  "/edit/:inv_id",
+  utilities.checkAccountType,
+  utilities.handleErrors(invController.buildEditInventory),
+);
+
+router.post(
+  "/update",
+  utilities.checkAccountType,
+  invValidate.inventoryRules(),
+  invValidate.checkInventoryData,
+  utilities.handleErrors(invController.updateInventory),
 );
 
 module.exports = router;

@@ -331,6 +331,75 @@ main h1 {
   text-decoration: underline;
 }
 
+/* =========================
+   Inventory Management table (AJAX)
+   ========================= */
+
+#inventoryDisplay {
+  width: 100%;
+  margin-top: 1rem;
+  border-collapse: collapse;
+  /* removes double borders */
+  border: 1px solid #d1d5db;
+  border-radius: 10px;
+  overflow: hidden;
+  /* helps with rounded corners */
+  background: #fff;
+}
+
+#inventoryDisplay thead th {
+  text-align: left;
+  font-weight: 700;
+  padding: 0.75rem 0.9rem;
+  background: #f1f5f9;
+  border-bottom: 1px solid #d1d5db;
+}
+
+#inventoryDisplay tbody td {
+  padding: 0.7rem 0.9rem;
+  border-bottom: 1px solid #e5e7eb;
+  vertical-align: middle;
+}
+
+#inventoryDisplay tbody tr:nth-child(even) {
+  background: #fafafa;
+}
+
+#inventoryDisplay tbody tr:hover {
+  background: #eef6ff;
+}
+
+#inventoryDisplay td:nth-child(2),
+#inventoryDisplay td:nth-child(3) {
+  width: 110px;
+  text-align: center;
+  white-space: nowrap;
+}
+
+/* Make Modify/Delete look like buttons */
+#inventoryDisplay a {
+  display: inline-block;
+  padding: 0.35rem 0.6rem;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+
+/* Modify button */
+#inventoryDisplay a[href^="/inv/edit/"] {
+  background: #e0f2fe;
+  border: 1px solid #7dd3fc;
+  color: #075985;
+}
+
+/* Delete button */
+#inventoryDisplay a[href^="/inv/delete/"] {
+  background: #fee2e2;
+  border: 1px solid #fca5a5;
+  color: #991b1b;
+}
+
 /* -------- Reviews --------- */
 .reviews ul {
   padding-left: 1.2rem;
