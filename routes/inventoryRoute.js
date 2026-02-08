@@ -76,6 +76,7 @@ router.get(
   utilities.handleErrors(invController.buildEditInventory),
 );
 
+// Process inventory update
 router.post(
   "/update",
   utilities.checkAccountType,

@@ -14,7 +14,7 @@
         <% }) %>
     </ul>
 <% } %>
-<form class="inv-form" action="/inv/update" method="post">
+<form id="updateForm" class="inv-form" action="/inv/update" method="post">
     <fieldset>
         <legend>Update Vehicle</legend>
         <label for="classificationList">Classification</label>
@@ -40,6 +40,8 @@
             <input type="hidden" name="inv_image" value="<%= locals.inv_image || '' %>">
             <input type="hidden" name="inv_thumbnail" value="<%= locals.inv_thumbnail || '' %>">            
             <input type="hidden" name="inv_id" value="<%= locals.inv_id || '' %>">
-            <button type="submit">Update Inventory Item</button>
+            <button type="submit" disabled>Update Inventory Item</button>
     </fieldset>
 </form>
+
+<script src="/js/inv-update.js"></script>

@@ -61,6 +61,7 @@ body {
 #tools a:focus {
   text-decoration: underline;
 }
+
 /* ---------- Inventory management links---------- */
 .inv-management__links {
   list-style: none;
@@ -150,6 +151,27 @@ body {
 .account-form button:hover,
 .inv-form button:hover {
   filter: brightness(1.05);
+}
+
+/* Disabled submit button (Update Inventory) */
+.account-form button:disabled,
+.inv-form button:disabled {
+  background: #9ca3af;
+  color: #f1f5f9;
+  cursor: not-allowed;
+  opacity: 0.75;
+  box-shadow: none;
+}
+
+/* Prevent hover effect when disabled */
+.account-form button:disabled:hover,
+.inv-form button:disabled:hover {
+  filter: none;
+}
+
+.account-form button,
+.inv-form button {
+  transition: background-color 0.15s ease, opacity 0.15s ease;
 }
 
 /* ---------- Validation colors (only after submit attempt) ---------- */

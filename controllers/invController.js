@@ -100,6 +100,59 @@ invCont.addInventory = async function (req, res, next) {
 }
 
 /* ***************************
+ *  Update Inventory Item
+ * ************************** */
+invCont.updateInventory = async function (req, res, next) {
+  const nav = await utilities.getNav()
+
+  // Always keep inv_id as an integer for safety
+  const inv_id = parseInt(req.body.inv_id, 10)
+  if (Number.isNaN(inv_id)) {
+    return next({ status: 400, message: "Invalid inventory id." })
+  }
+
+  // Build the object we send to the model
+  const updateData = {
+    ...req.body,
+    inv_id,
+  }
+
+  const updateResult = await invModel.updateInventoryItem(updateData)
+
+  if (updateResult) {
+    req.flash("notice", "Inventory item updated successfully.")
+
+    // If you want to return to management after update (common for this course):
+    const classificationSelect = await utilities.buildClassificationList()
+    return res.render("inventory/management", {
+      title: "Inventory Management",
+      nav,
+      classificationSelect,
+      errors: null,
+    })
+
+    // Alternative (also OK): redirect to the detail page
+    // return res.redirect(`/inv/detail/${inv_id}`)
+  }
+
+  // FAILED update → rebuild dropdown and re-render edit view with stickiness
+  req.flash("notice", "Sorry, the update failed.")
+
+  const classificationList = await utilities.buildClassificationList(
+    req.body.classification_id
+  )
+
+  return res.status(500).render("inventory/edit-inventory", {
+    title: `Edit ${req.body.inv_make || ""} ${req.body.inv_model || ""}`.trim(),
+    nav,
+    classificationList,
+    errors: null,
+    ...req.body, // sticky values back into the form
+    inv_id,      // ensure inv_id is present for the hidden field
+  })
+}
+
+/* ***************************
  *  Build add classification view
  * ************************** */
 invCont.buildAddClassification = async function (req, res, next) {
