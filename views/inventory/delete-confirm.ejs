@@ -1,0 +1,24 @@
+<% if (title) { %>
+    <h1>
+        <%= title %>
+    </h1>
+<% } %>
+<%- messages() %>
+<p class="error">
+    Confirm deletion. This action cannot be undone.
+</p>
+<form class="inv-form" action="/inv/delete" method="post">
+    <fieldset>
+        <legend>Delete Vehicle</legend>
+        <label>Make</label>
+        <input value="<%= inv_make %>" readonly>
+        <label>Model</label>
+        <input value="<%= inv_model %>" readonly>
+        <label>Year</label>
+        <input value="<%= inv_year %>" readonly>
+        <label>Price</label>
+        <input value="<%= inv_price %>" readonly>
+        <input type="hidden" name="inv_id" value="<%= inv_id %>">
+        <button type="submit">Delete Vehicle</button>
+    </fieldset>
+</form>

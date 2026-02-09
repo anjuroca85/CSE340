@@ -189,31 +189,33 @@ invCont.buildByClassificationId = async function (req, res, next) {
 /* ***************************
  *  Build inventory detail view
  * ************************** */
-invCont.buildDetailView = async function (req, res, next){
-  const inv_id = req.params.inv_id;
-  // Get the specific vehicle data from the model chosen
-  const data = await invModel.getInventoryByInvId(inv_id);
-  // If no vehicle found, trigger 404 through your error handler
-  if (!data || data.length === 0) {
-    return next({ status: 404, message: "Sorry, we could not find that vehicle."});
+invCont.buildDetailView = async function (req, res, next) {
+  const inv_id = parseInt(req.params.inv_id, 10);
+
+  if (Number.isNaN(inv_id)) {
+    return next({ status: 400, message: "Invalid inventory id." });
+  }
+
+  const vehicle = await invModel.getInventoryByInvId(inv_id); // object
+
+  if (!vehicle) {
+    return next({
+      status: 404,
+      message: "Sorry, we could not find that vehicle.",
+    });
   }
 
   const nav = await utilities.getNav();
+  const title = `${vehicle.inv_make} ${vehicle.inv_model}`;
+  const vehicleDetail = await utilities.buildDetailView(vehicle);
 
-   // Title must be make + model as a requirement to fetch data correctly
-
-   const vehicle = data[0];
-   const title = `${vehicle.inv_make} ${vehicle.inv_model}`;
-
-   // Build the HTML for the detail page 
-   const vehicleDetail = await utilities.buildDetailView(vehicle);
-
-   res.render("./inventory/detail",{
+  res.render("./inventory/detail", {
     title,
     nav,
     vehicleDetail,
-   });
-  };
+  });
+};
+
 
 /* ***************************
  *  Return Inventory by Classification As JSON
@@ -272,6 +274,56 @@ invCont.buildEditInventory = async function (req, res, next) {
     errors: null,
     ...itemData, // makes fields available for stickiness in the view
   })
+}
+
+/* ***************************
+ *  Build delete confirmation view
+ * ************************** */
+invCont.buildDeleteView = async function (req, res, next) {
+  const nav = await utilities.getNav()
+  const inv_id = parseInt(req.params.inv_id, 10)
+
+  if (Number.isNaN(inv_id)) {
+    return next({ status: 400, message: "Invalid inventory id." })
+  }
+
+  const itemData = await invModel.getInventoryByInvId(inv_id) // This one is to return rows[0]
+
+  if (!itemData) {
+    return next({ status: 404, message: "Sorry, we could not find that vehicle." })
+  }
+
+  const itemName = `${itemData.inv_make} ${itemData.inv_model}`
+
+  res.render("inventory/delete-confirm", {
+    title: `Delete ${itemName}`,
+    nav,
+    errors: null,
+    ...itemData,
+  })
+}
+
+/* ***************************
+ *  Process delete inventory item
+ * ************************** */
+invCont.deleteInventoryItem = async function (req, res, next) {
+  const { inv_id } = req.body
+  const id = parseInt(inv_id, 10)
+
+  if (Number.isNaN(id)) {
+    req.flash("notice", "Invalid inventory id.")
+    return res.redirect("/account/")
+  }
+
+  const deleteResult = await invModel.deleteInventoryItem(id)
+
+  if (deleteResult) {
+    req.flash("notice", "Inventory item deleted successfully.")
+    return res.redirect("/account/")
+  }
+
+  req.flash("notice", "Sorry, the delete failed.")
+  return res.redirect(`/inv/delete/${id}`)
 }
 
 module.exports = invCont;

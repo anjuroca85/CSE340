@@ -12,7 +12,7 @@ router.get(
   "/",
   utilities.checkLogin,
   utilities.checkAccountType,
-  utilities.handleErrors(invController.buildManagement),
+  utilities.handleErrors(invController.buildManagement)
 );
 
 // Add Classification view (Employee/Admin only)
@@ -20,7 +20,7 @@ router.get(
   "/add-classification",
   utilities.checkLogin,
   utilities.checkAccountType,
-  utilities.handleErrors(invController.buildAddClassification),
+  utilities.handleErrors(invController.buildAddClassification)
 );
 
 // Process add classification
@@ -30,7 +30,7 @@ router.post(
   utilities.checkAccountType,
   invValidate.classificationRules(),
   invValidate.checkClassificationData,
-  utilities.handleErrors(invController.addClassification),
+  utilities.handleErrors(invController.addClassification)
 );
 
 // deliver add-inventory view
@@ -38,7 +38,7 @@ router.get(
   "/add-inventory",
   utilities.checkLogin,
   utilities.checkAccountType,
-  utilities.handleErrors(invController.buildAddInventory),
+  utilities.handleErrors(invController.buildAddInventory)
 );
 
 //process adding inventory item
@@ -48,7 +48,7 @@ router.post(
   utilities.checkAccountType,
   invValidate.inventoryRules(),
   invValidate.checkInventoryData,
-  utilities.handleErrors(invController.addInventory),
+  utilities.handleErrors(invController.addInventory)
 );
 
 // Route to build inventory by classification view
@@ -72,6 +72,7 @@ router.get(
 // Edit inventory item view (Employee/Admin only)
 router.get(
   "/edit/:inv_id",
+  utilities.checkLogin,
   utilities.checkAccountType,
   utilities.handleErrors(invController.buildEditInventory),
 );
@@ -79,10 +80,27 @@ router.get(
 // Process inventory update
 router.post(
   "/update",
+  utilities.checkLogin,
   utilities.checkAccountType,
   invValidate.inventoryRules(),
   invValidate.checkInventoryData,
   utilities.handleErrors(invController.updateInventory),
+);
+
+// Deliver delete confirmation view (Employee/Admin only)
+router.get(
+  "/delete/:inv_id",
+  utilities.checkLogin,
+  utilities.checkAccountType,
+  utilities.handleErrors(invController.buildDeleteView),
+);
+
+// Process the delete request (Employee/Admin only)
+router.post(
+  "/delete",
+  utilities.checkLogin,
+  utilities.checkAccountType,
+  utilities.handleErrors(invController.deleteInventoryItem),
 );
 
 module.exports = router;
