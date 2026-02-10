@@ -1,0 +1,44 @@
+<% if (title) { %>
+    <h1>
+        <%= title %>
+    </h1>
+<% } %>
+<%- messages() %>
+<% if (errors && errors.array) { %>
+    <ul class="error-list">
+        <% errors.array().forEach(error=> { %>
+            <li>
+                <%= error.msg %>
+            </li>
+            <% }) %>
+    </ul>
+<% } %>
+
+<form class="account-form" action="/account/update" method="post">
+    <fieldset>
+        <legend>Account Update</legend>
+        <label for="account_firstname">First Name</label>
+        <input id="account_firstname" name="account_firstname" required autocomplete="given-name"
+            value="<%= account_firstname || '' %>">
+        <label for="account_lastname">Last Name</label>
+        <input id="account_lastname" name="account_lastname" required autocomplete="family-name"
+            value="<%= account_lastname || '' %>">
+        <label for="account_email">Email</label>
+        <input id="account_email" name="account_email" type="email" required autocomplete="email"
+            value="<%= account_email || '' %>">
+        <input type="hidden" name="account_id" value="<%= account_id %>">
+        <button type="submit">Update Account</button>
+    </fieldset>
+</form>
+<form class="account-form" action="/account/update-password" method="post">
+    <fieldset>
+        <legend>Change Password</legend>
+        <label for="account_password">New Password</label>
+        <input id="account_password" name="account_password" type="password" required autocomplete="new-password">
+        <span>
+            Password must meet requirements (length, uppercase, number, special character).
+        </span>
+        <input type="hidden" name="account_id" value="<%= account_id %>">
+        <button type="submit">Change Password</button>
+    </fieldset>
+</form>

@@ -159,4 +159,155 @@ accountController.accountLogout = async function (req, res) {
   return res.redirect("/")
 }
 
+/* ****************************************
+ *  Build account update view
+ * ************************************ */
+accountController.buildUpdateAccount = async function (req, res, next) {
+  const nav = await utilities.getNav()
+  const account_id = parseInt(req.params.account_id, 10)
+
+  if (Number.isNaN(account_id)) {
+    req.flash("notice", "Invalid account id.")
+    return res.redirect("/account/")
+  }
+
+  // Optional safety: only allow user to edit themself (unless Admin)
+  const loggedInId = Number(res.locals.accountData?.account_id)
+  const accountType = res.locals.accountData?.account_type
+
+  if (loggedInId !== account_id && accountType !== "Admin") {
+    req.flash("notice", "You are not authorized to update that account.")
+    return res.redirect("/account/")
+  }
+
+  const accountData = await accountModel.getAccountById(account_id)
+
+  if (!accountData) {
+    req.flash("notice", "Account not found.")
+    return res.redirect("/account/")
+  }
+
+  res.render("account/update-account", {
+    title: "Update Account",
+    nav,
+    errors: null,
+    account_id: accountData.account_id,
+    account_firstname: accountData.account_firstname,
+    account_lastname: accountData.account_lastname,
+    account_email: accountData.account_email,
+  });
+}
+
+/* ****************************************
+ *  Process account update
+ * ************************************ */
+accountController.updateAccount = async function (req, res, next) {
+  const nav = await utilities.getNav()
+
+  const account_id = parseInt(req.body.account_id, 10)
+  if (Number.isNaN(account_id)) {
+    req.flash("notice", "Invalid account id.")
+    return res.redirect("/account/")
+  }
+
+  // Only allow user to update themself (unless Admin)
+  const loggedInId = Number(res.locals.accountData?.account_id)
+  const accountType = res.locals.accountData?.account_type
+  if (loggedInId !== account_id && accountType !== "Admin") {
+    req.flash("notice", "You are not authorized to update that account.")
+    return res.redirect("/account/")
+  }
+
+  const { account_firstname, account_lastname, account_email } = req.body
+
+  try {
+    const updateResult = await accountModel.updateAccountInfo({
+      account_id,
+      account_firstname,
+      account_lastname,
+      account_email,
+    })
+
+    if (!updateResult) {
+      req.flash("notice", "Sorry, the account update failed.")
+      return res.status(500).render("account/update-account", {
+        title: "Update Account",
+        nav,
+        errors: null,
+        account_id,
+        account_firstname,
+        account_lastname,
+        account_email,
+      })
+    }
+
+    req.flash("notice", "Account information updated successfully.")
+
+    // OPTIONAL but recommended: refresh JWT so header/greeting uses new name/email
+    const freshAccount = await accountModel.getAccountById(account_id)
+    const tokenPayload = {
+      ...res.locals.accountData,
+      account_firstname: freshAccount.account_firstname,
+      account_lastname: freshAccount.account_lastname,
+      account_email: freshAccount.account_email,
+    }
+    const accessToken = jwt.sign(tokenPayload, process.env.ACCESS_TOKEN_SECRET, { expiresIn: 3600 })
+    const cookieOptions =
+      process.env.NODE_ENV === "development"
+        ? { httpOnly: true, maxAge: 3600 * 1000 }
+        : { httpOnly: true, secure: true, maxAge: 3600 * 1000 }
+    res.cookie("jwt", accessToken, cookieOptions)
+
+    return res.redirect("/account/")
+  } catch (error) {
+    return next(error)
+  }
+}
+
+/* ****************************************
+ *  Process password change
+ * ************************************ */
+accountController.updatePassword = async function (req, res, next) {
+  const nav = await utilities.getNav()
+
+  const account_id = parseInt(req.body.account_id, 10)
+  if (Number.isNaN(account_id)) {
+    req.flash("notice", "Invalid account id.")
+    return res.redirect("/account/")
+  }
+
+  // Only allow user to update themself (unless Admin)
+  const loggedInId = Number(res.locals.accountData?.account_id)
+  const accountType = res.locals.accountData?.account_type
+  if (loggedInId !== account_id && accountType !== "Admin") {
+    req.flash("notice", "You are not authorized to update that account.")
+    return res.redirect("/account/")
+  }
+
+  const { account_password } = req.body
+
+  try {
+    const hashedPassword = await bcrypt.hash(account_password, 10)
+    const result = await accountModel.updatePassword(account_id, hashedPassword)
+
+    if (!result) {
+      req.flash("notice", "Sorry, the password update failed.")
+      // re-render view with account info
+      const accountData = await accountModel.getAccountById(account_id)
+      return res.status(500).render("account/update-account", {
+        title: "Update Account",
+        nav,
+        errors: null,
+        ...accountData,
+      })
+    }
+
+    req.flash("notice", "Password updated successfully.")
+    return res.redirect("/account/")
+  } catch (error) {
+    return next(error)
+  }
+}
+
+
 module.exports = accountController;
