@@ -243,7 +243,6 @@ accountController.updateAccount = async function (req, res, next) {
 
     req.flash("notice", "Account information updated successfully.")
 
-    // OPTIONAL but recommended: refresh JWT so header/greeting uses new name/email
     const freshAccount = await accountModel.getAccountById(account_id)
     const tokenPayload = {
       ...res.locals.accountData,

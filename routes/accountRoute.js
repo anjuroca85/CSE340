@@ -6,6 +6,7 @@ const router = new express.Router();
 const utilities = require("../utilities");
 const accountController = require("../controllers/accountController");
 const regValidate = require("../utilities/account-validation");
+const favController = require("../controllers/favoriteController");
 
 // Route to build check log in in default route
 router.get(
@@ -70,5 +71,26 @@ router.post(
   regValidate.checkPasswordData,
   utilities.handleErrors(accountController.updatePassword),
 );
+
+// Favorites view
+router.get(
+  "/favorites",
+  utilities.checkLogin,
+  utilities.handleErrors(favController.buildFavorites)
+)
+
+// Add favorite
+router.post(
+  "/favorites/add",
+  utilities.checkLogin,
+  utilities.handleErrors(favController.addFavorite)
+)
+
+// Remove favorite
+router.post(
+  "/favorites/remove",
+  utilities.checkLogin,
+  utilities.handleErrors(favController.removeFavorite)
+)
 
 module.exports = router;

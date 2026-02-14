@@ -2,6 +2,7 @@
 const invModel = require("../models/inventory-model");
 const utilities = require("../utilities/");
 const invCont = {};
+const favModel = require("../models/favorite-model");
 
 /* ***************************
  *  Add new classification
@@ -209,10 +210,18 @@ invCont.buildDetailView = async function (req, res, next) {
   const title = `${vehicle.inv_make} ${vehicle.inv_model}`;
   const vehicleDetail = await utilities.buildDetailView(vehicle);
 
+  let isFavorite = false;
+  if (res.locals.loggedin) {
+    const account_id = Number(res.locals.accountData.account_id);
+    isFavorite = await favModel.isFavorite(account_id, inv_id);
+  }
+
   res.render("./inventory/detail", {
     title,
     nav,
     vehicleDetail,
+    vehicle,
+    isFavorite
   });
 };
 

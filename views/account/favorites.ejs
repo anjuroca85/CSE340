@@ -1,0 +1,34 @@
+<!-- favorites.ejs -->
+<% if (title) { %>
+  <h1><%= title %></h1>
+<% } %>
+
+<%- messages() %>
+
+<% if (!favorites || favorites.length === 0) { %>
+  <p>You have no favorites yet.</p>
+<% } else { %>
+  <ul id="inv-display">
+    <% favorites.forEach(v => { %>
+      <li>
+        <a href="/inv/detail/<%= v.inv_id %>">
+          <img src="<%= v.inv_thumbnail %>" alt="Image of <%= v.inv_make %> <%= v.inv_model %>">
+        </a>
+        <div class="namePrice">
+          <hr />
+          <h2>
+            <a href="/inv/detail/<%= v.inv_id %>">
+              <%= v.inv_year %> <%= v.inv_make %> <%= v.inv_model %>
+            </a>
+          </h2>
+          <span>$<%= new Intl.NumberFormat('en-US').format(v.inv_price) %></span>
+
+          <form action="/account/favorites/remove" method="post" style="margin-top:.5rem;">
+            <input type="hidden" name="inv_id" value="<%= v.inv_id %>">
+            <button type="submit">Remove</button>
+          </form>
+        </div>
+      </li>
+    <% }) %>
+  </ul>
+<% } %>

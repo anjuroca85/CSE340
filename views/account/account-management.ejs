@@ -1,3 +1,4 @@
+<!-- account-management.ejs -->
 <% if (title) { %>
     <h1>
         <%= title %>
@@ -5,6 +6,8 @@
 <% } %>
 
 <%- messages() %>
+
+<p><a href="/account/favorites">My Favorites</a></p>
 
 <% if (locals.accountData) { %>
 
